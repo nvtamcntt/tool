@@ -1,5 +1,20 @@
 <resources>
-    <string name="app_name">AutoData</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="app_name">自動ツール</string>
+    <string name="tab_text_1">CSVフィールをアプロード</string>
+    <string name="tab_text_2">一覧</string>
+    <string name="member_register_bt_member_info">お客さま情報・子ども情報登録へ進む</string>
+    <string name="tutorial_member_register">会員登録へすすむ</string>
+    <string name="member_register_1_bt">会員登録へすすむ</string>
+    <string name="member_register_bt_followshop">お気に入り店舗設定へ進む</string>
+    <string name="member_register_bt_register">この内容で登録する</string>
+    <string name="paste_url_file">CSVフィールのurl を貼付する</string>
+    <string name="download">ダウンロード</string>
+    <string name="download_and_parse_csv"><![CDATA[Download & Parse Data]]></string>
+
+    <string name="empty_list_text">記録しません</string>
+    <string name="registed">登録しました</string>
+    <string name="not_register">登録しません</string>
+    <string name="not_url">ファイルが見つかりません</string>
+    <string name="enable_control_center">自動登録サービスを有効にする</string>
+    <string name="download_finish">ダウンロードが終了！</string>
 </resources>
