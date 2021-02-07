@@ -1,7 +1,6 @@
 package com.pipongteam.autodata.ui.main;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -12,37 +11,26 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pipongteam.autodata.R;
-import com.pipongteam.autodata.provider.DBManager;
-import com.pipongteam.autodata.provider.DatabaseHelper;
 import com.pipongteam.autodata.provider.ReadFileCsv;
-import com.pipongteam.autodata.service.DownloadFile;
 import com.pipongteam.autodata.utils.PreferencesUtils;
 import com.suke.widget.SwitchButton;
 
@@ -64,6 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private com.suke.widget.SwitchButton mSwitchButton;
     private EditText mUrl;
     private Context mContext;
+    private String mFileName;
     private SharedPreferences mSharedPrefs;
 
     public HomeFragment updateParams(int index) {
@@ -129,7 +118,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             // Prevents the occasional unintentional call. I needed this.
             if (mDownloadedFileID == -1)
                 return;
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "file.csv");
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), mFileName);
 
             try {
                 if(file.exists()){
@@ -153,13 +142,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ReadFileCsv mReadFileCSV;
 
     private void downloadFileProcess() {
+        mFileName = System.currentTimeMillis() + "file.csv";
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mLink));
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
         request.setTitle("download");
         request.setDescription("Downloading ....");
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "file.csv");
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mFileName);
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
         mDownloadedFileID = mDownloadManager.enqueue(request);
     }

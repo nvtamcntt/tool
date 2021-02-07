@@ -5,6 +5,7 @@
     <string name="member_register_bt_member_info">お客さま情報・子ども情報登録へ進む</string>
     <string name="tutorial_member_register">会員登録へすすむ</string>
     <string name="member_register_1_bt">会員登録へすすむ</string>
+    <string name="member_register_bt_text">会員登録へ進む</string>
     <string name="member_register_bt_followshop">お気に入り店舗設定へ進む</string>
     <string name="member_register_bt_register">この内容で登録する</string>
     <string name="paste_url_file">CSVフィールのurl を貼付する</string>
@@ -17,4 +18,5 @@
     <string name="not_url">ファイルが見つかりません</string>
     <string name="enable_control_center">自動登録サービスを有効にする</string>
     <string name="download_finish">ダウンロードが終了！</string>
+    <string name="can_not_register">無有</string>
 </resources>

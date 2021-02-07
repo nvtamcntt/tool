@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.pipongteam.autodata.entity.Info;
 
+import java.util.ArrayList;
+
 public class DBManager {
 
     private DatabaseHelper dbHelper;
@@ -49,6 +51,23 @@ public class DBManager {
             }
         }
         return null;
+    }
+
+    public ArrayList<Info> fetchAllRecordRegisted() {
+        ArrayList<Info> list = new ArrayList<>();
+        Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, new String[]{DatabaseHelper._ID, DatabaseHelper.POINT_NUMBER, DatabaseHelper.SECURITY_NUMBER, DatabaseHelper.IS_REGISTED},
+                "is_registed = 0", null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                Info info = new Info(
+                        cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID)),
+                        cursor.getString(cursor.getColumnIndex(DatabaseHelper.SECURITY_NUMBER)),
+                        cursor.getString(cursor.getColumnIndex(DatabaseHelper.POINT_NUMBER)),
+                        cursor.getInt(cursor.getColumnIndex(DatabaseHelper.IS_REGISTED)));
+                list.add(info);
+            }
+        }
+        return list;
     }
 
     public Info getItemByID(int id) {

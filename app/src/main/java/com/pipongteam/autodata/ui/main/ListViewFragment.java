@@ -1,12 +1,8 @@
 package com.pipongteam.autodata.ui.main;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,16 +12,12 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pipongteam.autodata.R;
 import com.pipongteam.autodata.provider.DBManager;
-import com.pipongteam.autodata.provider.DatabaseHelper;
-import com.pipongteam.autodata.service.DownloadFile;
 
 import static com.pipongteam.autodata.utils.PreferencesUtils.PREFNAME;
 
@@ -72,8 +64,6 @@ public class ListViewFragment extends Fragment {
 
             @Override
             public void onChanged(@Nullable String s) {
-                // TODO ..
-                Log.d("TAG", "nvtamcntt >>> onChanged");
                 reloadData();
             }
         });

@@ -1,13 +1,13 @@
 package com.pipongteam.autodata;
 
-import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,8 +15,9 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
-import com.pipongteam.autodata.service.DownloadFile;
 import com.pipongteam.autodata.ui.main.SectionsPagerAdapter;
 import com.pipongteam.autodata.service.AccessibilityServiceHandle;
 
@@ -26,12 +27,21 @@ public class MainActivity extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 1111;
     public static int ACTION_ACCESSIBILITY_RESULT_CODE = 100;
     private SectionsPagerAdapter mSectionsPageAdapter;
+    ImageView mAppButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         mSectionsPageAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        mSectionsPageAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
+        mAppButton = findViewById(R.id.fab);
+        mAppButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoApp();
+            }
+        });
         viewPager.setAdapter(mSectionsPageAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
@@ -99,5 +109,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void gotoApp() {
+        Intent launchIntent = null;
+        try {
+            launchIntent = getPackageManager().getLaunchIntentForPackage("multi.parallel.dualspace.cloner");
+        } catch (Exception ignored) {
+        }
+
+        if (launchIntent == null) {
+            startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://play.google.com/store/apps/details?id=" + "multi.parallel.dualspace.cloner")));
+        } else {
+            startActivity(launchIntent);
+        }
     }
 }

@@ -19,6 +19,10 @@ public class Info {
         this.isRegisted = isRegisted;
     }
 
+    public Info() {
+
+    }
+
     public String getSecurityCode() {
         return securityCode;
     }
@@ -35,4 +39,19 @@ public class Info {
         this.pointCode = pointCode;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIsRegisted() {
+        return isRegisted;
+    }
+
+    public void setIsRegisted(int isRegisted) {
+        this.isRegisted = isRegisted;
+    }
 }
