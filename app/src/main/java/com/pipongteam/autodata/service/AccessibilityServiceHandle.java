@@ -18,8 +18,14 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.pipongteam.autodata.R;
 import com.pipongteam.autodata.entity.Info;
 import com.pipongteam.autodata.provider.DBManager;
@@ -59,7 +65,6 @@ public class AccessibilityServiceHandle extends AccessibilityService {
     private boolean isCheckPolicy = false;
 
     private Context mContext;
-
     private boolean isEnableService = false;
 
     private Handler mHandler = new Handler();
@@ -76,7 +81,7 @@ public class AccessibilityServiceHandle extends AccessibilityService {
             if (mInfoList.size() != 0) {
                 mInfo = mInfoList.get(0);
             }
-            Log.v(TAG, "Get data size " + mInfoList.size());
+            //Log.v(TAG, "Get data size " + mInfoList.size());
         }
     };
 
@@ -114,28 +119,28 @@ public class AccessibilityServiceHandle extends AccessibilityService {
             switch (eventType) {
                 case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                     if (ROOT_APP.equals(accessibilityEvent.getPackageName())) {
-                        Log.v(TAG, "TYPE_WINDOW_CONTENT_CHANGED ");
+                        //Log.v(TAG, "TYPE_WINDOW_CONTENT_CHANGED ");
                     }
                 case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
 
                     if (ROOT_APP.equals(accessibilityEvent.getPackageName())) {
-                        isEnableService = PreferencesUtils.getSharedPrefAppEnable(mContext);
+                        isEnableService = PreferencesUtils.getSharedPrefUserEnable(mContext);
                         if (isEnableService) {
                             if (isNeedReloadData) {
                                 mLoadDataHandler.removeCallbacks(mRunnable);
                                 mLoadDataHandler.postDelayed(mRunnable, 1000);
                             }
-                            Log.v(TAG, "TYPE_WINDOW_STATE_CHANGED ");
+                            //Log.v(TAG, "TYPE_WINDOW_STATE_CHANGED ");
                             AccessibilityNodeInfo source = accessibilityEvent.getSource();
                             if (source != null) {
                                 source.refresh();
                                 try {
                                     for (AccessibilityNodeInfo accessibilityNodeInfoElement : source.findAccessibilityNodeInfosByViewId(SKIP_BUTTON_STEP1)) {
                                         accessibilityNodeInfoElement.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                                        Log.v(TAG, "SKIP_BUTTON_STEP1 ");
+                                        //Log.v(TAG, "SKIP_BUTTON_STEP1 ");
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -148,13 +153,13 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                                 String contentText = node.getText().toString();
                                                 if (contentText.equals(mContext.getString(R.string.member_register_bt_text))) {
                                                     accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                                                    Log.v(TAG, "SKIP_BUTTON_STEP 2 " + System.currentTimeMillis());
+                                                    //Log.v(TAG, "SKIP_BUTTON_STEP 2 " + System.currentTimeMillis());
                                                 }
                                             }
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -162,7 +167,7 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                     List<AccessibilityNodeInfo> findAccessibilityNodeInfosByViewId = source.findAccessibilityNodeInfosByViewId(SKIP_BUTTON_STEP3);
                                     if (!(findAccessibilityNodeInfosByViewId == null || findAccessibilityNodeInfosByViewId.isEmpty())) {
                                         for (AccessibilityNodeInfo accessibilityNodeInfo : findAccessibilityNodeInfosByViewId) {
-                                            Log.v(TAG, "SKIP_BUTTON_STEP 3 " + System.currentTimeMillis());
+                                            //Log.v(TAG, "SKIP_BUTTON_STEP 3 " + System.currentTimeMillis());
 //                                            mHandler.removeCallbacksAndMessages(null);
 
                                             mHandler.postDelayed(new Runnable() {
@@ -174,7 +179,7 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
                                 try {
@@ -183,12 +188,12 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                         for (AccessibilityNodeInfo accessibilityNodeInfo : findAccessibilityNodeInfosByViewId) {
 
                                             accessibilityNodeInfo.performAction(16);
-                                            Log.v(TAG, "SKIP_BUTTON_STEP 4 " + findAccessibilityNodeInfosByViewId.size());
+                                            //Log.v(TAG, "SKIP_BUTTON_STEP 4 " + findAccessibilityNodeInfosByViewId.size());
 
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -203,14 +208,14 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                                         mInfo.getPointCode());
                                                 accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                                                 isFilledPointCode = true;
-                                                Log.v(TAG, "SKIP_BUTTON_STEP 4 SET POINT ");
+                                                //Log.v(TAG, "SKIP_BUTTON_STEP 4 SET POINT ");
                                             }
 
                                         }
 
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -224,12 +229,12 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                                     mInfo.getSecurityCode());
                                             accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                                             isFilledSecurityCode = true;
-                                            Log.v(TAG, "SKIP_BUTTON_STEP  4 SET SECURITY ");
+                                            //Log.v(TAG, "SKIP_BUTTON_STEP  4 SET SECURITY ");
                                         }
 
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -249,7 +254,7 @@ public class AccessibilityServiceHandle extends AccessibilityService {
 
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -268,11 +273,11 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                                         if (!isCheckPolicy) {
                                             accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                                             isCheckPolicy = true;
-                                            Log.v(TAG, "CHECK BOX SECURITY ");
+                                            //Log.v(TAG, "CHECK BOX SECURITY ");
                                         }
                                     }
                                 } catch (Exception e) {
-                                    Log.v(TAG, "ERROR  " + e.getMessage());
+                                    //Log.v(TAG, "ERROR  " + e.getMessage());
                                     e.printStackTrace();
                                 }
 
@@ -353,7 +358,7 @@ public class AccessibilityServiceHandle extends AccessibilityService {
                             accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                         }
 
-                        Log.v(TAG, "NEXT BUTTON CLICK");
+                        //Log.v(TAG, "NEXT BUTTON CLICK");
                     }
                 }
             }
@@ -369,7 +374,7 @@ public class AccessibilityServiceHandle extends AccessibilityService {
 
     @Override
     public void onServiceConnected() {
-        Log.v(TAG, "onServiceConnected");
+        //Log.v(TAG, "onServiceConnected");
         mContext = getApplicationContext();
 
         AccessibilityServiceInfo accessibilityServiceInfo = new AccessibilityServiceInfo();
@@ -385,9 +390,11 @@ public class AccessibilityServiceHandle extends AccessibilityService {
 
     @Override
     public void onCreate() {
-        super.onCreate();
 
         Log.v(TAG, "onCreate");
         mContext = getApplicationContext();
+        super.onCreate();
+
     }
+
 }

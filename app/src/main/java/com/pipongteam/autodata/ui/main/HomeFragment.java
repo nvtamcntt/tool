@@ -29,6 +29,11 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.pipongteam.autodata.R;
 import com.pipongteam.autodata.provider.ReadFileCsv;
 import com.pipongteam.autodata.utils.PreferencesUtils;
@@ -62,6 +67,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return this;
     }
 
+
+    public void isEnableUseApp() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            PreferencesUtils.setSharedPrefUserEnable(mContext, true);
+                        }
+                    } else {
+                        PreferencesUtils.setSharedPrefUserEnable(mContext, false);
+                    }
+                }
+            });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +104,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             Bundle savedInstanceState) {
         mContext = getActivity().getApplicationContext();
 
-        mSharedPrefs = mContext.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE| Context.MODE_MULTI_PROCESS);
+        mSharedPrefs = mContext.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
         View root = inflater.inflate(R.layout.fragment_upload_file, container, false);
         mPasteButton = root.findViewById(R.id.btn_paste);
         mDownloadButton = root.findViewById(R.id.download_button);
@@ -101,6 +126,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         mContext.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
+        isEnableUseApp();
+
         return root;
     }
 
@@ -121,7 +148,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), mFileName);
 
             try {
-                if(file.exists()){
+                if (file.exists()) {
                     mDownloadButton.setClickable(true);
                     mDownloadButton.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
                     mLink = "";
@@ -199,6 +226,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private String mLink = "";
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
