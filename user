@@ -1,10 +1,14 @@
 [
 {
-user: "test",
-flag: "test"
+url: "https://cdn.jsdelivr.net/gh/LuuTinhIT/mvvdsnvdsjnsdvddafeeew/0.jpg",
+thumb: "https://cdn.jsdelivr.net/gh/LuuTinhIT/mvvdsnvdsjnsdvddafeeew/thumb/0.jpg"
 },
 {
-user: "admin",
-flag: "admin"
+url: "https://cdn.jsdelivr.net/gh/LuuTinhIT/mvvdsnvdsjnsdvddafeeew/1.jpg",
+thumb: "https://cdn.jsdelivr.net/gh/LuuTinhIT/mvvdsnvdsjnsdvddafeeew/thumb/1.jpg"
+},
+{
+url: "https://cdn.jsdelivr.net/gh/LuuTinhIT/mvvdsnvdsjnsdvddafeeew/2.jpg",
+thumb: "https://cdn.jsdelivr.net/gh/LuuTinhIT/mvvdsnvdsjnsdvddafeeew/thumb/2.jpg"
 }
 ]
