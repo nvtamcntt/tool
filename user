@@ -1,8 +1,10 @@
 [
 {
-user: "test"
+user: "test",
+flag: "test"
 },
 {
-user: "admin"
+user: "admin",
+flag: "admin"
 }
 ]
